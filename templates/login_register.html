@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+    {% if login_or_register == "login" %}
+        <link rel="stylesheet" href="/static/css/login.css">
+
+        <body class="body-login">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card card-signin my-5">
+                  <div class="card-body">
+                    {% if message %}
+                      <p style="color: red; font-size: 20px; font-family: 'Times New Roman'; text-align: center">{{ message }}</p>
+                    {% endif %}
+                    <h5 class="card-title text-center">Sign In</h5>
+                    <form action="{{ url_for("login_post") }}" method="post" class="form-signin">
+                      <div class="form-label-group">
+                        <input name="{{ email }}" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                        <label for="inputEmail">Email address</label>
+                      </div>
+
+                      <div class="form-label-group">
+                        <input name="{{ pswrd }}" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                        <label for="inputPassword">Password</label>
+                      </div>
+
+                      <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                        <label class="custom-control-label" for="customCheck1">Remember password</label>
+                      </div>
+                      <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+                      <a class="d-block text-center mt-2 small" href="{{ url_for("register_get") }}">Sign Up</a>
+                      <hr class="my-4">
+                      <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Google</button>
+                      <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </body>
+    {% else %}
+
+        <body>
+            <link rel="stylesheet" href="/static/css/register.css">
+
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-10 col-xl-9 mx-auto">
+                <div class="card card-signin flex-row my-5">
+                  <div class="card-img-left d-none d-md-flex">
+                     <!-- Background image for card set in CSS! -->
+                  </div>
+                  <div class="card-body">
+                    {% if message %}
+                      <p style="color: red; font-size: 20px; font-family: 'Times New Roman'; text-align: center">{{ message }}</p>
+                    {% endif %}
+                    <h5 class="card-title text-center">Register</h5>
+                    <form action="{{ url_for("register_post") }}" method="post" class="form-signin">
+                      <div class="form-label-group">
+                        <input name="{{ username }}" type="text" id="inputUserame" class="form-control" placeholder="Username" required autofocus>
+                        <label for="inputUserame">Username</label>
+                      </div>
+
+                      <div class="form-label-group">
+                        <input name="{{ email }}" type="email" id="inputEmail" class="form-control" placeholder="Email address" required>
+                        <label for="inputEmail">Email address</label>
+                      </div>
+
+                      <hr>
+
+                      <div class="form-label-group">
+                        <input name="{{ pswrd }}" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                        <label for="inputPassword">Password</label>
+                      </div>
+
+                      <div class="form-label-group">
+                        <input name="{{ confirm_pswrd }}" type="password" id="inputConfirmPassword" class="form-control" placeholder="Password" required>
+                        <label for="inputConfirmPassword">Confirm password</label>
+                      </div>
+
+                      <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
+                      <a class="d-block text-center mt-2 small" href="{{ url_for("login_get") }}">Sign In</a>
+                      <hr class="my-4">
+                      <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign up with Google</button>
+                      <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign up with Facebook</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </body>
+
+
+
+
+
+
+{#        <h1>Sign up</h1>#}
+{#        <br><br>#}
+{#        <form action="{{ url_for("register_post") }}" method="post">#}
+{#            <label for="Username">Username:</label>#}
+{#            <input type="text" id="Username" name="Username" minlength="4"><br><br>#}
+{#            <label for="Password">Password:</label>#}
+{#            <input type="password" id="Password" name="Password" minlength="8" required><br><br>#}
+{#            <input type="submit" value="Sign up">#}
+{#        </form>#}
+    {% endif %}
+
+{% endblock %}

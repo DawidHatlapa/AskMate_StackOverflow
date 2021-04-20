@@ -1,0 +1,285 @@
+{% extends "layout.html" %}
+{% set button_icon = "ask_a_question.png" %}
+{% set go_to = "add_question_get" %}
+
+{% block content %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+      <table>
+          <tr>
+            <td>&emsp;Filters:&emsp;</td>
+            <td>
+                <form method = "POST" action="{{ url_for("index_post") }}">
+                    <button type="submit" style="border: 0 none; background: none;" name="actual_advanced_filter_date_clicked" value="clicked">
+                        {% if server_state.actual_advanced_filter_on_date == "no" %}
+                        <img src="/static/images/filter_date_on.png" width="22" height="auto">
+                        {{ server_state.actual_filter_by_date_mode }}
+                        {% else %}
+                        <img src="/static/images/up-chevron-2.png"  width="16" height="auto">
+                        {% endif %}
+                    </button>
+
+                    <button type="submit" style="border: 0 none; background: none;" name="actual_advanced_filter_status_clicked" value="clicked">
+                        {% if server_state.actual_advanced_filter_on_status == "no" %}
+                        <img src="/static/images/filter_date_on.png" width="22" height="auto">
+                        {{ server_state.actual_filter_by_status_mode }}
+                        {% else %}
+                        <img src="/static/images/up-chevron-2.png"  width="16" height="auto">
+                        {% endif %}
+                    </button>
+
+                    <button type="submit" style="border: 0 none; background: none;" name="filter_reset_button_clicked" value="clicked">
+                        {% if server_state.filter_reset_active == "no" %}
+                        {% else %}
+                        <img src="/static/images/clear_filter.png"  width="22" height="auto">
+                            Reset All Filters
+                        {% endif %}
+                    </button>
+                </form>
+            </td>
+    </tr>
+    {% if server_state.actual_advanced_filter_on_date == "yes" %}
+    <tr>
+        <td style="text-align: right" >Status: </td>
+        <td style="text-align: left" colspan="4">
+            <form method = "POST" action="{{ url_for("index_post") }}">
+                <input type="hidden" name="date_filter_changed" value="true">
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true" name="date_filter" value="Last month">
+                    {% if server_state.actual_filter_by_date_mode == "Last month" %}
+                    <img src="/static/images/filter_date_on.png" width="22" height="auto">
+                    Last month
+                    {% else %}
+                    <img src="/static/images/filter_date_off.png"  width="22" height="auto">
+                    Last month
+                    {% endif %}
+                </button>
+
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true" name="date_filter" value="3 last months">
+                    {% if server_state.actual_filter_by_date_mode == "3 last months" %}
+                    <img src="/static/images/filter_date_on.png" width="22" height="auto">
+                    3 last months
+                    {% else %}
+                    <img src="/static/images/filter_date_off.png"  width="22" height="auto">
+                    3 last months
+                    {% endif %}
+                </button>
+
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true" name="date_filter" value="All time">
+                    {% if server_state.actual_filter_by_date_mode == "All time" %}
+                    <img src="/static/images/filter_date_on.png" width="22" height="auto">
+                    All time
+                    {% else %}
+                    <img src="/static/images/filter_date_off.png"  width="22" height="auto">
+                    All time
+                    {% endif %}
+                </button>
+            </form>
+        </td>
+    </tr>
+    {% endif %}
+
+    {% if server_state.actual_advanced_filter_on_status == "yes" %}
+    <tr>
+        <td style="text-align: right" >Status: </td>
+        <td>
+            <form method = "POST" action="{{ url_for("index_post") }}">
+                <input type="hidden" name="status_filter_changed" value="true">
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true" name="status_filter" value="active">
+                    {% if server_state.actual_filter_by_status_mode == "active" %}
+                    <img src="/static/images/filter_date_on.png" width="22" height="auto">
+                    active
+                    {% else %}
+                    <img src="/static/images/filter_date_off.png"  width="22" height="auto">
+                    active
+                    {% endif %}
+                </button>
+
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true" name="status_filter" value="new">
+                    {% if server_state.actual_filter_by_status_mode == "new" %}
+                    <img src="/static/images/filter_date_on.png" width="22" height="auto">
+                    new
+                    {% else %}
+                    <img src="/static/images/filter_date_off.png"  width="22" height="auto">
+                    new
+                    {% endif %}
+                </button>
+
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true" name="status_filter" value="discussed">
+                    {% if server_state.actual_filter_by_status_mode == "discussed" %}
+                    <img src="/static/images/filter_date_on.png" width="22" height="auto">
+                    discussed
+                    {% else %}
+                    <img src="/static/images/filter_date_off.png"  width="22" height="auto">
+                    discussed
+                    {% endif %}
+                </button>
+
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true" name="status_filter" value="closed">
+                    {% if server_state.actual_filter_by_status_mode == "closed" %}
+                    <img src="/static/images/filter_date_on.png" width="22" height="auto">
+                    closed
+                    {% else %}
+                    <img src="/static/images/filter_date_off.png"  width="22" height="auto">
+                    closed
+                    {% endif %}
+                </button>
+
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true" name="status_filter" value="All status">
+                    {% if server_state.actual_filter_by_status_mode == "All status" %}
+                    <img src="/static/images/filter_date_on.png" width="22" height="auto">
+                    All status
+                    {% else %}
+                    <img src="/static/images/filter_date_off.png"  width="22" height="auto">
+                    All status
+                    {% endif %}
+                </button>
+            </form>
+        </td>
+    </tr>
+    {% endif %}
+    </table>
+    </ul>
+        <form method = "POST" action="{{ url_for("index_post") }}" class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched_text" type="text"  value="{{ server_state.actual_filter_by_search_mode }}">
+            <button type="submit" style="border: 0 none; background: none;" name="filter_search_clicked" value="yes"  class="btn btn-outline-success" ><img src="/static/images/search.png" width="26" height="auto">Search</button>
+        </form>
+    </div>
+  </div>
+</nav>
+
+
+{# Tags pills (buttons) #}
+<table class="table">
+    <tr>
+        <td>
+            <ul class="nav nav-pills mb-3" id="ex1" role="tablist">
+                <a href="{{ url_for("select_tag", selected_tag='all_tags')}}"
+           {% if server_state.actual_tag == 'all_tags' %}
+                  class="nav-link active"
+           {% else %}
+                   class="nav-link"
+            {% endif %}
+                  id="ex1-tab-1"
+                  data-mdb-toggle="pill"
+                  role="tab"
+                  aria-controls="ex1-pills-1"
+                  aria-selected="true"
+                >all tags</a
+                >
+                </li>
+
+            {% for tag in tags_cloud %}
+                <li class="nav-item" role="presentation">
+                    <a href="{{ url_for("select_tag", selected_tag=tag['name']) }}"
+                      {% if server_state.actual_tag == tag['name'] %}
+                         class="nav-link active"
+                       {% else %}
+                               class="nav-link"
+                        {% endif %}
+
+                     class="nav-link "
+                      id="ex1-tab-{{ tag['name'] }}"
+                      data-mdb-toggle="pill"
+                      role="tab"
+                      aria-controls="ex1-pills-{{ tag['name'] }}"
+                      aria-selected="false"
+                    >{{ tag['name']}} ({{ tag['count']  }})</a
+                    >
+                </li>
+            {% endfor %}
+            </ul>
+        </td>
+    </tr>
+</table>
+
+{# Questions list #}
+<table class="table table-hover align-middle">
+        <thead class = "table-light">
+            <tr>
+                {% for header in headers %}
+                    {% for property in header %}
+                        <th>
+                            {% if header.get(property) == "vote_number" %}
+                            <a href="{{ url_for("sort_questions", sort_question_column=header.get(property))  }}">Votes</a>
+                             {% elif header.get(property) == "view_number" %}
+                            <a href="{{ url_for("sort_questions", sort_question_column=header.get(property))  }}">Views</a>
+                            {% elif header.get(property) == "answers_number" %}
+                                <a href="{{ url_for("sort_questions", sort_question_column=header.get(property))  }}">Answers</a>
+                            {% elif header.get(property) == "title" %}
+                            <a href="{{ url_for("sort_questions", sort_question_column=header.get(property))  }}">Question</a>
+                            {% elif header.get(property) == "status" %}
+                            <a href="{{ url_for("sort_questions", sort_question_column=header.get(property))  }}">Status</a>
+                            {% elif header.get(property) == "submission_time" %}
+                            <a href="{{ url_for("sort_questions", sort_question_column=header.get(property))  }}">Date Asked</a>
+                            {% elif header.get(property) == "tag_id" %}
+                                Tags
+                            {% endif %}
+
+                            {% if header.get(property) == server_state.actual_sort_column %}
+                                {% if server_state.actual_sort_direction == 'descending' %}
+                                <img src="static/images/up-arrow-4.png" width="10" height="auto">
+                                {% else %}
+                                <img src="static/images/down-arrow-4.png" width="10" height="auto">
+                                {% endif %}
+                            {% endif %}
+                        </th>
+                    {% endfor %}
+                {% endfor %}
+             </tr>
+        </thead>
+        <tbody>
+        {% for question in questions %}
+            {% if question["status"] == 'closed' %}
+                <tr>
+            {% elif question["status"] == 'new' %}
+               <tr class="table-success">
+            {% else %}
+                <tr>
+            {% endif %}
+            {% for property in question %}
+                    {% if property == "status" %}
+                        <td>
+                            {% if question["status"] == "new" %}
+                                <img src="/static/images/question_status_new.png" width="33" height="auto">
+                            {% elif question["status"] == "discussed" %}
+                                <img src="/static/images/question_status_discussed.png" width="33" height="auto">
+                            {% elif question["status"] == "closed" %}
+                                <img src="/static/images/question_status_closed.png" width="33" height="auto">
+                            {% endif %}
+                            <br>
+                            {{ question["status"] }}
+                        </td>
+                    {% elif property == "title" %}
+                        <td>
+                            <a href="{{ url_for("display_a_question", question_id=question.get("id"))}}" class="link-primary">{{ question.get(property)  | truncate(70)  }}</a>
+                        </td>
+                    {% elif property == "tags_names" %}
+                        <td>
+                            {% if question["tags_names"] %}
+                                {{ question["tags_names"] }}
+                            {% endif %}
+                        </td>
+                    {% else %}
+                        <td>
+                            {% if property != "id" and property != "image" and property != "message" %}
+                            {{ question.get(property) }}
+                            {% endif %}
+                        </td>
+            {% endif %}
+         {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot></tfoot>
+    </table>
+        <div class="d-flex flex-row-reverse">
+        {{ pagination.links }}
+    </div>
+
+
+{% endblock %}

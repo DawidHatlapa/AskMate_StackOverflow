@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LAB Stackoverflow</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/layout.css">
+    <link rel="stylesheet" href="/static/css/form.css">
+    <link rel="stylesheet" href="/static/css/display_question.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+
+</head>
+<body>
+     <div class="header">
+        <div class="header-back">
+            {% if go_index %}
+                <a href="{{ url_for(go_index) }}"><img src="/static/images/{{ back_icon }}"></a>
+            {% elif go_display %}
+                <a href="{{ url_for(go_display, question_id=id) }}"><img src="/static/images/{{ back_icon }}"></a>
+            {% endif %}
+        </div>
+        <div class="header-logo">
+            <a href="{{ url_for("index") }}"><img src="/static/images/stack_lab_askmate.png"></a>
+        </div>
+        <div class="header-button">
+            {% if button_icon %}
+                <a href="{{ url_for(go_to, question_id=question_id) }}"><img src="/static/images/{{ button_icon }}"></a>
+            {% elif left_icon %}
+                <img src="/static/images/{{ left_icon }}">
+            {% endif %}
+        </div>
+
+         {% include "login_button.html" %}
+
+{#            <div>#}
+{#                {% if session %}#}
+{#                    <form action="#">#}
+{#                        <button type="submit"><img src="/static/images/user.png"></button>#}
+{#                    </form>#}
+{#                {% else %}#}
+{#                    <form action="{{ url_for('login_get')}}">#}
+{#                        <button type="submit"><img src="/static/images/user.png"></button>#}
+{#                    </form>#}
+{#                {% endif %}#}
+{#            </div>#}
+     </div>
+
+     <!-- Main body -->
+     <div>
+         {% block content %}{% endblock %}
+     </div>
+
+
+<!-- Footer -->
+<footer class="bg-light text-center text-lg-start">
+  <!-- Copyright -->
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0,)">
+    © 2021 Copyright: Lab stackoverflow Team<br>Dawid Hatlapa
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
+
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% set go_display = "display_a_question" %}
+{%  set id = question["id"] %}
+{% set back_icon = "back_to_index.png" %}
+{% set left_icon = "chatting%20(1).png" %}
+
+{% block content %}
+
+    {% if mode == "question" %}
+
+        <div class="question-info">
+                <div class="form-header">
+                    <h4>Question information:</h4>
+                </div>
+                <h5>{{ question["title"] }}:</h5>
+                <p>{{ question["message"] }}</p>
+        </div>
+
+        <div class="form-box-2">
+
+            <div class="form-header">
+                <h2>Add new comment</h2>
+            </div>
+
+            <form action="{{ url_for("add_comment_to_question_post", question_id=question["id"])}}" method="post">
+
+                <div class="input-box">
+                    {#                    INPUTS HIDDEN#}
+                    <input name="question_id" id="question_id" type="hidden" value="{{ question["id"] }}">
+                    <input name="user_id" id="user_id" type="hidden" value="{{ session["user_id"] }}">
+                    {#                    INPUTS#}
+                    <label for="message">Comment message:</label><br>
+                    <textarea class="textarea-fiels" name="message" id="message" minlength="1" maxlength="1500"></textarea>
+                </div>
+                <div class="submit-button" >
+                        <button type="submit" >Add new comment</button>
+                </div>
+            </form>
+        </div>
+
+    {% else %}
+        <div class="question-info">
+
+            <div class="form-header">
+                <h4>Question information:</h4>
+            </div>
+
+            <h5>{{ question["title"] }}:</h5>
+            <p>{{ question["message"] }}</p>
+
+            <div class="form-header">
+                <h4>Answer information:</h4>
+            </div>
+            <h5>{{ answer["message"] }}</h5>
+
+        </div>
+
+        <div class="form-box-2">
+            <div class="form-header">
+                <h2>Add new comment</h2>
+            </div>
+
+            <form action="{{ url_for("add_comment_to_answer_post", answer_id=answer["id"]) }}" method="post">
+                <div class="input-box">
+
+                    {#                    INPUTS HIDDEN#}
+                    <input type="hidden" name="answer_id" value="{{ answer["id"] }}">
+                    <input type="hidden" name="edited_count" value="{{ 0 }}">
+                    <input name="user_id" id="user_id" type="hidden" value="{{ session["user_id"] }}">
+
+                    {#                    INPUT#}
+                    <label for="answer_comment">Comment message:</label><br>
+                    <textarea class="textarea-field" name="message" minlength="1" maxlength="1500" required></textarea><br>
+                </div>
+                <div class="submit-button" >
+                    <button type="submit" >Add new comment</button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+
+{% endblock %}

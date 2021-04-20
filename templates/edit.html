@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% set go_display = "display_a_question" %}
+{% if answer %}
+    {%  set id = answer["question_id"] %}
+    {% set left_icon = "chatting%20(1).png" %}
+{% else %}
+    {%  set id = question_id %}
+    {% set left_icon = "discussion.png" %}
+{% endif %}
+{% set back_icon = "back_to_index.png" %}
+
+{% block content %}
+    {% if question_id %}
+        <div class="form-box">
+            <div class="form-header">
+                <h2>Edit question</h2>
+            </div>
+            <form action="{{ url_for('edit_question_post', question_id=question['id']) }}" method="post" enctype="multipart/form-data">
+
+                <div class="input-box">
+                {#                    INPUTS#}
+                    <label for="title">Title question:</label><br>
+                    <input class="input-field" name="title" id="title" type="text" minlength="5" maxlength="100" value="{{ question['title'] }}" required><br>
+                    <label for="message">Message question:</label><br>
+                    <textarea class="textarea-field" name="message" id="message" minlength="5" maxlength="1500" required>{{ question["message"]}}</textarea><br>
+                </div>
+                {#                    IMAGE#}
+                <div class="image-box">
+                    {% if question["image"] != "" %}
+                        <img src="{{ img_path }}/{{ question["image"] }}" alt="{{ question["image"] }}" title="{{ question["image"] }}" width="100" height="auto"><br>
+                        <input type="file" name="image" id="image"><br>
+                    {% else %}
+                        <input type="file" name="image" id="image" value="No file uploaded yet"><br>
+                    {% endif %}
+                </div>
+                <div class="checkbox">
+                    {#                    TAGS#}
+                    {% if tags_list != [] %}
+                        <label for="tags">Tags:</label><br>
+                        {% for tag in tags_list %}
+                            {% if tag in tags_selected %}
+                                <input class="input-checkbox" type="checkbox" name="{{ tag['name'] }}" id="{{ tag['name'] }}" value="{{ tag['name'] }}" checked>{{ tag['name'] }}
+                            {% else %}
+                                <input class="input-checkbox" type="checkbox" name="{{ tag['name'] }}" id="{{ tag['name'] }}" value="{{ tag['name'] }}">{{ tag['name'] }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <br>
+                    <label for="add_new_tag">Add a new tag:</label><br>
+                    <input class="new-tag" type="text" name="tag" id="tag" minlength="3" maxlength="15">
+                </div>
+
+                    <div class="submit-button" >
+                        <button type="submit" >Edit question</button>
+                    </div>
+            </form>
+        </div>
+    {% else %}
+        <div class="form-box">
+            <div class="form-header">
+                <h2>Edit answer</h2>
+            </div>
+            <form action="{{ url_for("edit_answer_post", answer_id=answer["id"]) }}" method="post" enctype="multipart/form-data">
+                <div class="input-box">
+
+                    {#                    INPUTS#}
+                    <label for="message"> Answer:</label><br>
+                    <textarea class="textarea-field" name="message" id="message" minlength="1" maxlength="5000" required>{{ answer["message"] }}</textarea><br>
+                </div>
+
+                <div class="image-box">
+                    {#                    IMAGE#}
+                    <label for="image">Choose a new image:</label>
+                    <input type="file" name="image" id="image" value="{{ answer["image"] }}">
+                </div>
+
+                <div class="submit-button" >
+                    <button type="submit" >Edit answer</button>
+                </div>
+            </form>
+            <div class="form-header">
+                <h5>Image attached:</h5>
+            </div>
+                {#                    IMAGE#}
+                {% if answer["image"] != "" %}
+                    <form action="{{ img_path }}" target="_blank">
+                        <button><img src="{{ img_path }}" alt="{{ answer["image"] }}" title="{{ answer["image"] }}" width="100" height="auto"></button>
+                    </form>
+
+                    <form action="{{ url_for("delete_answer_img", answer_id=answer["id"]) }}">
+                        <button type="submit" style="border: 0 none; background: none;" name="delete_image" value="delete_image"><img src="/static/images/remove_image.png" width="33" height="auto"></button>
+                    </form>
+            </div>
+        </div>
+                {% endif %}
+    {% endif %}
+
+{% endblock %}

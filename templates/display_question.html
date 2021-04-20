@@ -1,0 +1,288 @@
+{% extends "layout.html" %}
+{% set go_index = "index" %}
+{% set back_icon = "back_to_index.png" %}
+{% set button_icon = "discussion.png" %}
+{% set go_to = "edit_question_get" %}
+{% set question_id = question["id"] %}
+
+{% block content %}
+
+{#    DISPLAY QUESTION#}
+    <div class="question">
+
+{#        QUESTION TITLE#}
+        <div class="question-title">
+            <h1>{{ question["title"] }}
+                <form method = "POST" action="{{ url_for("change_question_status") }}">
+                    <input type="hidden" name="question_id" value="{{ question["id"] }}">
+                    {% if question["status"] == "closed" %}
+                        <button type="submit" name="new_question_status" value="open">
+                            <img id="status-img" src="/static/images/open.png">
+                        </button>
+                    {% else %}
+                        <button type="submit" style="border: 0 none; background: none;" name="new_question_status" value="close">
+                            <img src="/static/images/close.png" width="44" height="auto">
+                        </button>
+                    {% endif %}
+                </form>
+            </h1>
+        </div>
+
+        <div class="under-title">
+{#        VOTE FOR QUESTION#}
+            <div class="vote-container">
+                <div id="up">
+                        <form method = "POST" action="{{ url_for("vote") }}">
+                            <input type="hidden" name="question_id" value="{{ question["id"] }}">
+                            <input type="hidden" name="url_origin" value="display_question">
+                            <input type="hidden" name="vote_for_answer_or_question" value="vote_for_question">
+                            {% if user_id %}
+                                <button type="submit" name="vote" value="up_vote"><img src="/static/images/up-chevron.png"></button>
+                            {% else %}
+                                <button type="button" name="vote" value="up_vote" disabled><img src="/static/images/up-chevron.png"></button>
+                            {% endif %}
+                        </form>
+                </div>
+                <div id="num">
+                    <p>{{ question["vote_number"] }}</p>
+                </div>
+                <div id="down">
+                        <form method = "POST" action="{{ url_for("vote") }}">
+                            <input type="hidden" name="question_id" value="{{ question["id"] }}">
+                            <input type="hidden" name="vote_for_answer_or_question" value="vote_for_question">
+                            {% if user_id %}
+                                <button type="submit" name="vote" value="down_vote"><img src="/static/images/down-chevron.png"></button>
+                            {% else %}
+                                <button type="submit" name="vote" value="down_vote" disabled><img src="/static/images/down-chevron.png"></button>
+                            {% endif %}
+                        </form>
+                </div>
+            </div>
+
+{#            QUESTION MESSAGE, TAGS AND OTHER DATA#}
+            <div class="right-content">
+                <article>
+                    {{ question["message"] }}
+                </article>
+                {% if question["image"] %}
+                    <div>
+                        <div class="image-button">
+                            <form action="{{ img_path }}/{{ question["image"] }}" target="_blank">
+                                <button><img src="{{ img_path }}/{{ question["image"] }}" alt="{{ question["image"] }}" title="{{ question["image"] }}"></button>
+                            </form>
+                        </div>
+                        {% if user_id %}
+                            <div class="del-button">
+                                <form action="{{ url_for('delete_image_from_question', question_id=question["id"])}}">
+                                    <button type="submit" name="delete_image" value="delete_image"><img class="del-img" src="/static/images/remove_image.png"></button> <!-- style="border: 0 none; background: none;" -->
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <p><b>Tags</b>:
+                    {% for tag in question_tags %}
+                        {{ tag["name"] }}
+                    {% endfor %}
+                </p>
+                <small>
+                    <b>Viewed</b>: {{ question["view_number"] }} times  <b>Question asked</b>: {{ question["submission_time"] }}
+                    {% if question["username"]%}
+                            <b> by: {{ question["username"] }} ({{ question["email"] }})</b>
+                        {% else %}
+                            <b> by: anonymous</b>
+                        {% endif %}
+
+                </small>
+            </div>
+        </div>
+
+{#        DELETE QUESTION#}
+        {% if user_id %}
+            <div class="del-question-button">
+                <form action="{{ url_for('delete_question', question_id=question["id"])}}" style="display: inline; vertical-align: top">
+                    <button type="submit" name="delete_question" value="delete_question"><img src="/static/images/delete_question.png"></button>
+                </form>
+            </div>
+
+{#        ADD ANSWER#}
+            <div class="add-answer">
+                <form action="{{ url_for("post_an_answer_get", question_id=question["id"]) }}">
+                    <button type="submit" name="new_answer" value="new_answer"><img src="/static/images/write_new_answer.png"></button>
+                </form>
+            </div>
+
+{#        ADD COMMENT#}
+            <div class="add-comment">
+                <form action="{{ url_for("add_comment_to_question_get", question_id=question["id"]) }}">
+                    <button type="submit" name="add_comment" value="add_comment"><img src="/static/images/chatting%20(1).png"></button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{#    END OF QUESTION#}
+
+    <br><br>
+
+{#    COMMENTS TO QUESTION#}
+    <details class="hidden-info">
+        <summary>See comments to the question</summary>
+        {% for comment in comments %}
+            {% if question["id"] == comment["question_id"] %}
+                <div class="comment-question">
+                    <p>{{ comment["message"] }}</p>
+                    <small>
+                        {% if comment["username"] %}
+                            <b>Comment added by </b><em>{{ comment["username"] }}</em> <b>on</b> {{ comment["submission_time"] }}.
+                        {% else %}
+                            <b>Comment added by </b><em>anonymous</em> <b>on</b> {{ comment["submission_time"] }}.
+                        {% endif %}
+
+                        {% if comment["edited_count"] %}
+                            <b>Edited</b>: {{ comment["edited_count"] }}
+                        {% else %}
+                            <b>Edited</b>: 0
+                        {% endif %}
+                    </small>
+                    {% if username == comment["username"] %}
+                        <form action="{{ url_for("delete_comment", comment_id = comment["comment_id"]) }}">
+                            <button type="submit" name="delete_comment" value="delete_comment"><img src="/static/images/delete_comment.png" width="30" height="auto"></button>
+                        </form>
+                        <form action="{{ url_for("edit_comment_get", comment_id = comment["comment_id"]) }}">
+                            <button type="submit" name="edit_comment" value="edit_comment"><img src="/static/images/edit_comment.png" width="30" height="auto"></button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </details>
+{#    END OF COMMENTS TO QUESTION#}
+
+
+{#    ANSWERS TO QUESTIONS#}
+    {% for answer in answers %}
+        <div class="question-answers">
+
+            {% if username == question["username"] and answer["accepted"] != true %}
+                <div class="accepted_answer">
+                    <form action="{{ url_for("accepted_answer", answer_id=answer["id"]) }}">
+                        <button type="submit" name="accepted_answer" value="accepted_answer"><img src="/static/images/accepted.png"></button>
+                    </form>
+                </div>
+            {% elif answer["accepted"] == true %}
+                <div class="accepted_answer">
+                    <img src="/static/images/star.png">
+                </div>
+            {% endif %}
+
+            <div class="answer-cell">
+    {#        VOTE FOR ANSWER#}
+                <div class="answer-vote-container">
+                    <div id="up">
+                        <form method = "POST" action="{{ url_for("vote") }}">
+                            <input type="hidden" name="question_id" value="{{ question["id"] }}">
+                            <input type="hidden" name="url_origin" value="display_question">
+                            <input type="hidden" name="vote_for_answer_or_question" value="vote_for_answer">
+                            <input type="hidden" name="answer_id" value="{{ answer["id"] }}">
+                            {% if user_id %}
+                                <button type="submit" name="vote" value="up_vote"><img src="/static/images/up-chevron.png"></button>
+                            {% else %}
+                                <button type="submit" name="vote" value="up_vote" disabled><img src="/static/images/up-chevron.png"></button>
+                            {% endif %}
+                        </form>
+                    </div>
+                    <div id="num">
+                        <p>{{ answer["vote_number"] }}</p>
+                    </div>
+                    <div id="down">
+                        <form method = "POST" action="{{ url_for("vote") }}">
+                            <input type="hidden" name="question_id" value="{{ question["id"] }}">
+                            <input type="hidden" name="url_origin" value="display_question">
+                            <input type="hidden" name="vote_for_answer_or_question" value="vote_for_answer">
+                            <input type="hidden" name="answer_id" value="{{ answer["id"] }}">
+                            {% if user_id %}
+                                <button type="submit" name="vote" value="down_vote"><img src="/static/images/down-chevron.png"></button>
+                            {% else %}
+                                <button type="submit" name="vote" value="down_vote" disabled><img src="/static/images/down-chevron.png"></button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+
+{#            ANSWER MESSAGE AND PUBLICATION DATA#}
+
+                <div class="answer-content">
+                    <article>{{ answer["message"] }}</article>
+                    {% if answer["image"] %}
+                        <div>
+                            <form action="{{ img_path }}/{{ answer["image"] }}" target="_blank">
+                                <button><img src="{{ img_path }}/{{ answer["image"] }}" alt="{{ answer["image"] }}" title="{{ answer["image"] }}"></button>
+                            </form>
+                        </div>
+                    {% endif %}
+                    <small><b>Answer posted</b>: {{ answer["submission_time"] }}
+                    {% if answer["username"]%}
+                        <b> by: </b>{{ answer["username"] }} ({{ answer["email"] }})
+                        {% else %}
+                        <b> by:</b> anonymous
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+
+
+{#            ADD COMMENT, EDIT AND DELETE BUTTONS#}
+
+            {% if user_id %}
+                <div class="answer-buttons">
+                    <form action="{{ url_for("delete_answer", answer_id=answer["id"]) }}">
+                        <button type="submit"><img src="/static/images/delete_answer.png"></button>
+                    </form>
+                    <form action="{{ url_for('edit_answer_get', answer_id=answer["id"]) }}">
+                        <button type="submit"><img src="/static/images/edit_question.png"></button>
+                    </form>
+                    <form action="{{ url_for("add_comment_to_answer_get", answer_id=answer["id"]) }}">
+                        <button type="submit" name="add_comment" value="add_comment"><img src="/static/images/add_comment.png"></button>
+                    </form>
+
+                </div>
+            {%  endif %}
+        </div>
+
+{#        COMMENTS TO ANSWER#}
+        <details class="hidden-info">
+            <summary>See comments to the answer</summary>
+            {% for comment in comments %}
+                {% if answer["id"] == comment["answer_id"] %}
+                    <div class="comment-question">
+                        <p>{{ comment["message"] }}</p>
+                        <small>
+                            {% if comment["username"] %}
+                                <b>Comment added by </b><em>{{ comment["username"] }}</em> <b>on</b> {{ comment["submission_time"] }}.
+                            {% else %}
+                                <b>Comment added by </b><em>anonymous</em> <b>on</b> {{ comment["submission_time"] }}.
+                            {% endif %}
+
+                            {% if comment["edited_count"] %}
+                                <b>Edited</b>: {{ comment["edited_count"] }}
+                            {% else %}
+                                <b>Edited</b>: 0
+                            {% endif %}
+                        </small>
+                        {% if username == comment["username"] %}
+                            <form action="{{ url_for("delete_comment", comment_id = comment["comment_id"]) }}">
+                                <button type="submit" name="delete_comment" value="delete_comment"><img src="/static/images/delete_comment.png" width="30" height="auto"></button>
+                            </form>
+                            <form action="{{ url_for("edit_comment_get", comment_id = comment["comment_id"]) }}">
+                                <button type="submit" name="edit_comment" value="edit_comment"><img src="/static/images/edit_comment.png" width="30" height="auto"></button>
+                            </form>
+                        {%  endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </details>
+
+    {% endfor %}
+{#    END OF ANSWERS#}
+
+{% endblock %}

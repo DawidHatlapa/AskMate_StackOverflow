@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <table class="table table-hover align-middle">
+        <thead class = "table-light">
+            <tr>
+                {% for header in headers %}
+                    {% if header == "username" %}
+                        <th>Username</th>
+                    {% elif header == "join_date" %}
+                        <th>Registration date</th>
+                    {% elif header == "count_questions" %}
+                        <th>Count of asked questions</th>
+                    {% elif header == "count_answers" %}
+                        <th>Count of answers</th>
+                    {% elif header == "count_comments" %}
+                        <th>Count of comments</th>
+                    {% elif header == "reputation" %}
+                        <th>Reputation</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    {% for header in headers %}
+                        {% if header == "username" %}
+                            <td>
+                                <a href={{ url_for("user_page") }}>{{ user[header] }}</a>
+                            </td>
+                        {% else %}
+                            <td>
+                                {{ user[header] }}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

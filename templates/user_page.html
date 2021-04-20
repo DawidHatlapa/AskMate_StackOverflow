@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <link rel="stylesheet" href="/static/css/user_page.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+
+<section class="profile align-middle">
+  <div class="align-middle">
+    <div class="details">
+      <img src="/static/images/user.png"  class="profile-pic">
+      <h1 class="heading">{{ user_info["username"] }}</h1>
+      <div class="location">
+        <p>{{ user_info["email"] }}</p>
+      </div>
+      <div class="stats">
+        <div class="col-4">
+          <h4>{{ user_info["reputation"] }}</h4>
+          <p>Reputation</p>
+        </div>
+        <div class="col-4">
+          <h4>{{ user_info["count_questions"] }}</h4>
+          <p>Questions asked</p>
+        </div>
+        <div class="col-4">
+          <h4>{{ user_info["count_answers"] }}</h4>
+          <p>Answers posted</p>
+        </div>
+        <div class="col-4">
+          <h4>{{ user_info["count_comments"] }}</h4>
+          <p>Comments posted</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<table class="table table-hover text-center">
+
+    <thead>
+        <tr >
+            <td colspan="2">
+            <form method = "POST" action="{{ url_for("user_page_post") }}">
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true" name="toogle_user_activity_list" value="yes">
+                    {% if server_state.is_enabled_user_activity_lists == "yes" %}
+                    <img src="/static/images/buy%20(1).png" width="75" height="auto">
+                    Hide User Activity
+                    {% else %}
+                    <img src="/static/images/buy.png"  width="75" height="auto">
+                    See User Activity
+                    {% endif %}
+                </button>
+            </form>
+            </td>
+            <td></td>
+        </tr>
+        {% if server_state.is_enabled_user_activity_lists == "yes" %}
+        <tr>
+            <td>Time</td>
+            <td>
+            <form method = "POST" action="{{ url_for("user_page_post") }}">
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true"
+                        name="chosen_user_activity_list" value="answer">
+                    {% if server_state.actual_user_activity_list == "answer" %}
+                    <img src="/static/images/check.png" width="20" height="auto">
+                    {% endif %}
+                    <u>&nbsp;Posted answers&nbsp;</u>
+                </button>
+
+            <form method = "POST" action="{{ url_for("user_page_post") }}">
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true"
+                        name="chosen_user_activity_list" value="question">
+                    {% if server_state.actual_user_activity_list == "question" %}
+                    <img src="/static/images/check.png" width="20" height="auto">
+                    {% endif %}
+                    <u>&nbsp;Asked questions &nbsp;&nbsp;</u>
+                </button>
+
+            <form method = "POST" action="{{ url_for("user_page_post") }}">
+                <button type="submit" style="border: 0 none; background: none;" data-inline="true"
+                        name="chosen_user_activity_list" value="comment">
+                    {% if server_state.actual_user_activity_list == "comment" %}
+                    <img src="/static/images/check.png" width="20" height="auto">
+                    {% endif %}
+                    <u>&nbsp;Posted comments&nbsp;</u>
+                </button>
+            </form>
+
+            </td>
+        </tr>
+        {% endif %}
+    </thead>
+    <tbody>
+        {% for post in list_of_user_activity %}
+            <tr>
+                <td>{{ post['submission_time'] }}</td>
+                <td>{{ post['message'] }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+{% endblock %}

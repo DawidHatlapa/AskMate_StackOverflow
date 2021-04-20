@@ -1,0 +1,127 @@
+.form-box {
+    display: block;
+    width: 35%;
+    border: 5px solid #E79DB2;
+    margin: auto;
+    padding: 3px;
+    background-color: #F5F5F6;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 15px 25px lightcoral;
+}
+
+.form-header {
+    color: #495057;
+    padding: 20px;
+    text-decoration: underline #495057;
+    text-transform: uppercase;
+}
+
+.input-box {
+    padding: 10px;
+    color: #495057;
+}
+
+.input-box label {
+    padding: 10px;
+    font-weight: bold;
+    text-transform: capitalize;
+
+}
+
+.input-box input {
+    padding: 5px;
+    width: 400px;
+    margin-bottom: 10px;
+    border: 2px solid #E79DB2;
+
+}
+
+.input-box textarea {
+    padding: 5px;
+    width: 400px;
+    margin-bottom: 10px;
+    border: 2px solid #E79DB2;
+    margin-bottom: 10px;
+
+}
+
+.image-box {
+    padding: 10px;
+    font-weight: bold;
+    color: #495057;
+}
+
+.image-box input {
+    padding: 5px;
+
+}
+
+.checkbox {
+    padding: 10px;
+    color: #495057;
+}
+
+.checkbox label {
+    padding: 10px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+.checkbox input {
+    padding: 5px;
+
+}
+
+.new-tag {
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 2px solid #E79DB2;
+}
+
+.submit-button button {
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    outline: none;
+    color: #495057;
+    background-color: lightgray;
+    border: none;
+    border-radius: 15px;
+
+}
+
+.submit-button button:hover {
+    background-color: #E79DB2
+}
+
+.submit-button button:active {
+    background-color: #E79DB2;
+    transform: translateY(4px);
+}
+
+.question-info {
+    display: inline-block;
+    width: 35%;
+    margin-left: 10%;
+    border: 5px solid #E79DB2;
+    padding: 3px;
+    background-color: #F5F5F6;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 15px 25px lightcoral;
+    word-wrap: break-word;
+
+}
+
+.form-box-2 {
+    display: inline-block;
+    width: 35%;
+    border: 5px solid #E79DB2;
+    margin-left: 50%;
+    padding: 3px;
+    background-color: #F5F5F6;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 15px 25px lightcoral;
+}
